@@ -14,6 +14,7 @@ def carTupleToString(vehicle):
     result += '\n'
     result += f'Speed: {vehicle[2]}'
     result += '\n'
+    result += ":("
     return result
 
 vehicle = createVehicle("Toyota", "Camry", "20mph")
