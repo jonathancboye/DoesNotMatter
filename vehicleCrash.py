@@ -1,20 +1,36 @@
-import os
+from functools import reduce
+from os import linesep
 
-def createVehicle(make, model):
-    return lambda speed: (make, model, speed)
+def vehicleFactory(make):
+    return lambda model, year: createVehicle(make, model, year)
+
+def createVehicle(make, model, year):
+    return {
+        "Make": make,
+        "Model": model,
+        "Year": year
+    }
 
 def printVehicle(vehicle):
-    print(carTupleToString(vehicle))
+    print(vehicleToString(vehicle))
 
-def carTupleToString(vehicle):
-    result = ""
-    result += f'Make: {vehicle[0]}'
-    result += '\n'
-    result += f'Model: {vehicle[1]}'
-    result += '\n'
-    result += f'Speed: {vehicle[2]}'
-    result += '\n'
-    return result
 
-vehicle = createVehicle("Toyota", "Camry", "20mph")
-printVehicle(vehicle)
+def vehicleToString(vehicle):
+    stringPairs = [
+        pairToString(k, v) for k, v in vehicle.items()
+    ]
+    return reduce(concat, stringPairs, '')
+
+
+def pairToString(key, value):
+    return key + ": " + value + linesep
+
+def concat(first, second): return first + second
+
+toyotaFactory = vehicleFactory("Toyota")
+camry = toyotaFactory("Camry", "1990")
+prius = toyotaFactory("Prius", "2000")
+
+printVehicle(camry)
+printVehicle(prius)
+
